@@ -21,7 +21,7 @@ You may also be interested in the [vector processing benchmarks](https://github.
 - [raster](https://github.com/rspatial/raster)
 - [exactextractr](https://github.com/isciences/exactextractr)
 
-**Juliia**:
+**Julia**:
 - [Rasters.jl](https://github.com/rafaqz/Rasters.jl)
 
 ## Reproduction
