@@ -29,7 +29,7 @@ stack_file = 'stack.TIF'
 for i in range(10):
     tic = timeit.default_timer()
 
-    ras.rio.to_raster(stack_file, dtype = "uint16", compress = "LZW")
+    ras.rio.to_raster(stack_file, dtype = "uint16", compress = "LZW", INTERLEAVE = "BAND")
 
     toc = timeit.default_timer()
     t_list[i] = round(toc - tic, 2)

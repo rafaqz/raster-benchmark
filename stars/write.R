@@ -13,8 +13,8 @@ for (i in seq_len(10)) {
   tmp = tempfile(fileext = ".tif")
 
   # input rasters are 'UInt16'
-  t = system.time(write_stars(ras, tmp, options = "COMPRESS=LZW", type = "UInt16",
-                              NA_value = 0))
+  t = system.time(write_stars(ras, tmp, options = c("COMPRESS=LZW", "INTERLEAVE=BAND"),
+                              type = "UInt16", NA_value = 0))
   t_vec[i] = t[["elapsed"]]
 
   unlink(tmp)

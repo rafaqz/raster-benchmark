@@ -18,14 +18,15 @@ band_names = ["B1", "B10", "B11", "B2", "B3", "B4", "B5", "B6", "B7", "B9"]
 with rasterio.open(rasters[0]) as ras:
     meta = ras.meta
 
-meta.update(count = len(rasters))
+meta.update(count = len(rasters), compress = 'LZW', interleave = 'band',
+            tiled = False, blockxsize = 7771, blockysize = 1)
 
 t_list = [None] * 10
 stack_file = 'stack.TIF'
 for i in range(10):
     tic = timeit.default_timer()
 
-    with rasterio.open(stack_file, 'w', **meta, compress = 'LZW') as dst:
+    with rasterio.open(stack_file, 'w', **meta) as dst:
         for id, layer in enumerate(rasters, start = 1):
             with rasterio.open(layer) as stack:
                 dst.write_band(id, stack.read(1))

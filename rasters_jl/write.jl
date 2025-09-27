@@ -16,9 +16,9 @@ Rasters.checkmem!(false) # avoid a memory size bug on some machines
 ras = Raster(RasterStack(raster_files; name=band_names))
 stack_file = joinpath(data_dir, "stack.tif")
 # note that we use force=true to force overwriting the file,
-# and Rasters compresses by Zstd by default, but every other 
+# and Rasters compresses by Zstd by default, but every other
 # package uses LZW - so for consistency's sake we force the compression
 # to LZW as well.
-benchmark = @be write($stack_file, $ras; force=$true, options = $(Dict("COMPRESS" => "LZW"))) seconds=60
+benchmark = @be write($stack_file, $ras; force=$true, options = $(Dict("COMPRESS" => "LZW", "INTERLEAVE" => "BAND"))) seconds=60
 
 write_benchmark_as_csv(benchmark; task = "write")

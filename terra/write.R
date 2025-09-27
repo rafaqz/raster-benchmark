@@ -10,7 +10,7 @@ ras_names = c("B1", "B10", "B11", "B2", "B3", "B4", "B5", "B6", "B7", "B9")
 names(ras) = ras_names
 
 # input rasters are 'UInt16'
-param = list(gdal = "COMPRESS=LZW", datatype = "INT2U", NAflag = 0)
+param = list(gdal = c("COMPRESS=LZW", "INTERLEAVE=BAND"), datatype = "INT2U", NAflag = 0)
 
 t_vec = numeric(10)
 for (i in seq_len(10)) {
