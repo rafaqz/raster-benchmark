@@ -8,7 +8,7 @@ include("utils.jl")
 # Load the data
 data_dir = joinpath(dirname(@__DIR__), "data")
 buffer_df = GeoDataFrames.read(joinpath(data_dir, "vector", "buffers.gpkg"))
-buffer_df.geom = GO.tuples(buffer_df.geom) # convert to Julia form
+buffer_df.geom = GO.tuples(buffer_df.geometry) # convert to Julia form
 
 raster_dir = joinpath(data_dir, "LC08_L1TP_190024_20200418_20200822_02_T1")
 raster_files = filter(endswith(".TIF"), readdir(raster_dir; join = true))
