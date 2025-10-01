@@ -24,6 +24,7 @@ for (i in seq_len(10)) {
 ### {terra} as back-end
 ras = rast(rasters)
 ras = ras * 1 # explicitly load into memory
+names(ras) = ras_names
 
 t_vec_2 = numeric(10)
 for (i in seq_len(10)) {
