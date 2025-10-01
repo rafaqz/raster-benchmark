@@ -22,15 +22,21 @@ cat(paste("sf", packageVersion("sf"), "\n"))
 cat(paste("stars", packageVersion("stars"), "\n"))
 cat(paste("terra", packageVersion("terra"), "\n"))
 cat(paste("raster", packageVersion("raster"), "\n"))
-cat(paste("exactextractr", packageVersion("exactextractr"), "\n"))
+cat(paste("exactextractr", packageVersion("exactextractr")))
 ```
 
 ```{r collapse=TRUE}
 # check it manually
-cat("Python 3.8.10", "\n")
-cat("rasterio 1.3.4", "\n")
-cat("rasterstats 0.17.0", "\n")
-cat("rioxarray 0.13.2")
+cat("Python 3.17.3", "\n")
+cat("rasterio 1.4.3", "\n")
+cat("rasterstats 0.20.0", "\n")
+cat("rioxarray 0.19.0")
+```
+
+```{r collapse=TRUE}
+# check it manually
+cat("Julia 1.11.7", "\n")
+cat("Rasters_jl 0.14.6")
 ```
 
 ```{r}
@@ -41,7 +47,7 @@ df = do.call(rbind, lapply(files, read.csv2,
 ```
 
 ## Extract values by points
-#### 68 275 points
+**68 275 points**
 
 ```{r extract-points}
 df_agg = df[df$task == "extract-points", ]
@@ -60,7 +66,7 @@ ggplot(df_agg, aes(x = reorder(package, -median), y = median)) +
 ```
 
 ## Downsample
-#### 30 to 90 m
+**30 to 90 m**
 
 ```{r downsample}
 df_agg = df[df$task == "downsample", ]
@@ -115,7 +121,7 @@ ggplot(df_agg, aes(x = reorder(package, -median), y = median)) +
 ```
 
 ## Write multilayer
-#### 10 layers with masks, LZW compression
+**10 layers with masks, LZW compression**
 
 ```{r write}
 df_agg = df[df$task == "write", ]
@@ -134,7 +140,7 @@ ggplot(df_agg, aes(x = reorder(package, -median), y = median)) +
 ```
 
 ## Crop
-#### by rectangular extent
+**by rectangular extent**
 
 ```{r crop}
 df_agg = df[df$task == "crop", ]
@@ -153,7 +159,7 @@ ggplot(df_agg, aes(x = reorder(package, -median), y = median)) +
 ```
 
 ## Zonal statistics
-#### mean values for 1 940 buffers
+**mean values for 1 940 buffers**
 
 ```{r zonal}
 df_agg = df[df$task == "zonal", ]
@@ -177,36 +183,55 @@ ggplot(df_agg, aes(x = reorder(package, -median), y = median)) +
 
 See also the benchmark from the `{exactextractr}` package: https://github.com/isciences/exactextractr#performance
 
-```{r final-plot, eval=FALSE}
+```{r final-plot, include=FALSE}
 df_agg = aggregate(time ~ task + package, df, median)
+
+# language as a new variable
 python = c("rasterio", "rasterstats", "rioxarray")
-df_agg$lang = ifelse(df_agg$package %in% python, "Python", "R")
+df_agg$lang = ifelse(df_agg$package %in% python, "Python", NA)
+df_agg$lang = ifelse(df_agg$package %in% "rasters_jl", "Julia", df_agg$lang)
+df_agg$lang[is.na(df_agg$lang)] = "R"
 df_agg$lang = as.factor(df_agg$lang)
 
+# capitalize task names
+levels(df_agg$task) = tools::toTitleCase(levels(df_agg$task))
+levels(df_agg$task)[3] = "Extract Points"
+levels(df_agg$task)[5] = "NDVI"
+
 # drop slower funs from same packages 
-pkg_drop = c("raster-overlay", "stars-st_apply", "terra-fun", "exactextractr-terra")
+pkg_drop = c("raster-overlay", "stars-st_apply", "terra-fun", "exactextractr-raster")
 df_agg = df_agg[!df_agg$package %in% pkg_drop, ]
 
 # return only first part of string
 pkg_name = strsplit(as.character(df_agg$package), "-")
 df_agg$package = sapply(pkg_name, "[[", 1)
 
-xlabels = c("Crop", "Downsample", "Extract", "Load", "NDVI", "Write", "Zonal")
-ggplot(df_agg, aes(x = task, y = time)) +
-  geom_point(aes(shape = lang, color = package), size = 2, alpha = 0.8,
-             position = position_jitter(width = 0.2, seed = 1)) +
-  # override circles with squares in legend
-  guides(colour = guide_legend(override.aes = list(shape = 15))) +
+p = ggplot(df_agg, aes(x = package, y = time)) +
+  geom_point(aes(shape = lang, color = package), size = 2) +
+  facet_wrap(vars(task), scales = "free_y") +
+  # override circles with diamonds in legend
+  guides(colour = guide_legend(override.aes = list(shape = 18, size = 3.5))) +
   labs(title = "Benchmark raster operations",
        caption = "https://github.com/kadyb/raster-benchmark",
        color = "Package", shape = "Language") +
-  scale_x_discrete(labels = xlabels) +
   scale_color_brewer(palette = "Set1") +
   ylab("Time [s]") +
-  xlab("Task") +
   theme_light() +
-  theme(plot.title = element_text(hjust = 0.5),
-        plot.caption.position = "plot")
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"),
+        plot.caption.position = "plot",
+        axis.title.x = element_blank(),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor = element_blank(),
+        strip.background = element_blank(),
+        strip.text = element_text(colour = "black")
+        )
+p
+```
+
+```{r}
+ggsave("comparison.png", p, width = 800, height = 500, units = "px", scale = 2.5)
 ```
 
 ```{r}
