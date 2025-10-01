@@ -12,7 +12,7 @@ do
   for path in "${i}"/*
   do
     echo "$path"
-    pixi run --environment="r-$i" Rscript $path
+    Rscript "$path"
   done
 done
 
@@ -22,21 +22,17 @@ do
   for path in "${i}"/*
   do
     echo "$path"
-    pixi run --environment="py-$i" python3 $path
+    pixi run python "$path"
   done
 done
 
-
 # run Julia benchmarks
+julia --project=./rasters_jl -e 'using Pkg; Pkg.instantiate()'
 for i in ${Julia_packages[*]}
 do
-  # install julia packages first,
-  # since pixi doesn't handle those
-  pixi run --environment=julia-rasters julia --threads=auto --project=${i} -e 'using Pkg; Pkg.instantiate(); Pkg.precompile()'
-  # now the main loop
   for path in "${i}"/*.jl
   do
     echo "$path"
-    pixi run --environment=julia-rasters BENCHMARKING=true julia --threads=auto --project=${i} "$path"
+    julia --project=./rasters_jl "$path"
   done
 done
