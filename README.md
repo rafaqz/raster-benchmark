@@ -53,9 +53,9 @@ Landsat 8 satellite scene (10 bands, 30 m resolution, 7771 x 7871 pixels) was us
 Scene ID: *LC08_L1TP_190024_20200418_20200822_02_T1*
 
 ## Hardware configuration
-- CPU: Intel Xeon CPU E5-2620 v2 @ 2.10GHz
+- CPU: AMD Ryzen 9 5900X @ 3.7 GHz
 - RAM: 64 GB
-- OS: Pop!_OS 20.04 LTS
+- OS: Ubuntu 22.04.5 LTS
 
 ## Acknowledgment
 Landsat-8 image courtesy of the U.S. Geological Survey, https://earthexplorer.usgs.gov/
