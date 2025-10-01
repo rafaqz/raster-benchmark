@@ -29,7 +29,7 @@ for i in range(10):
     data.columns = band_names
     
     toc = timeit.default_timer()
-    t_list[i] = round(toc - tic, 2)
+    t_list[i] = round(toc - tic, 4)
     
 
 df = {'task': ['zonal'] * 10, 'package': ['rasterstats'] * 10, 'time': t_list}

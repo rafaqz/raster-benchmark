@@ -32,7 +32,7 @@ for i in range(10):
     ras.rio.to_raster(stack_file, dtype = "uint16", compress = "LZW", INTERLEAVE = "BAND")
 
     toc = timeit.default_timer()
-    t_list[i] = round(toc - tic, 2)
+    t_list[i] = round(toc - tic, 4)
 
 os.remove(stack_file)
 

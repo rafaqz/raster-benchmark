@@ -46,7 +46,7 @@ for i in range(10):
         (ras.height / data.shape[-2]))
     
     toc = timeit.default_timer()
-    t_list[i] = round(toc - tic, 2)
+    t_list[i] = round(toc - tic, 4)
 
 
 ras.close() # stack_file is opened by ras

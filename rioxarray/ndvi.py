@@ -26,7 +26,7 @@ for i in range(10):
     ndvi = (nir - red) / (nir + red)
     
     toc = timeit.default_timer()
-    t_list[i] = round(toc - tic, 2)
+    t_list[i] = round(toc - tic, 4)
 
 
 df = {'task': ['ndvi'] * 10, 'package': ['rioxarray'] * 10, 'time': t_list}

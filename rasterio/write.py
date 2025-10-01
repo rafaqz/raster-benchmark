@@ -33,7 +33,7 @@ for i in range(10):
                 dst.set_band_description(id, band_names[id - 1])
 
     toc = timeit.default_timer()
-    t_list[i] = round(toc - tic, 2)
+    t_list[i] = round(toc - tic, 4)
 
 os.remove(stack_file)
 

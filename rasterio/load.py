@@ -30,7 +30,7 @@ for i in range(10):
     meta.update(count = len(rasters))
     
     toc = timeit.default_timer()
-    t_list[i] = round(toc - tic, 2)
+    t_list[i] = round(toc - tic, 4)
 
 
 df = {'task': ['load'] * 10, 'package': ['rasterio'] * 10, 'time': t_list}

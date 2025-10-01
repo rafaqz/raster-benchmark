@@ -35,7 +35,7 @@ for i in range(10):
                          resampling = Resampling.average)
     
     toc = timeit.default_timer()
-    t_list[i] = round(toc - tic, 2)
+    t_list[i] = round(toc - tic, 4)
 
 
 df = {'task': ['downsample'] * 10, 'package': ['rioxarray'] * 10,

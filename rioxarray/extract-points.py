@@ -42,7 +42,7 @@ for i in range(10):
     data = vals.to_pandas().transpose()
     
     toc = timeit.default_timer()
-    t_list[i] = round(toc - tic, 2)
+    t_list[i] = round(toc - tic, 4)
 
 
 df = {'task': ['extract-points'] * 10, 'package': ['rioxarray'] * 10,

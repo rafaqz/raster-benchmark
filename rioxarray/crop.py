@@ -34,7 +34,7 @@ for i in range(10):
     ras_crop = ras.rio.clip_box(*area)
     
     toc = timeit.default_timer()
-    t_list[i] = round(toc - tic, 2)
+    t_list[i] = round(toc - tic, 4)
 
 
 df = {'task': ['crop'] * 10, 'package': ['rioxarray'] * 10, 'time': t_list}
