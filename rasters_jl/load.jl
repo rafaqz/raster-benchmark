@@ -12,6 +12,6 @@ raster_files = filter(endswith(".TIF"), readdir(raster_dir; join=true))
 
 Rasters.checkmem!(false) # make sure that Rasters does not error because it thinks there isn't enough memory
 # do something
-benchmark = @be RasterStack($raster_files) seconds=10
+benchmark = @be RasterStack($raster_files; lazy=false) seconds=10
 
 write_benchmark_as_csv(benchmark; task="load")

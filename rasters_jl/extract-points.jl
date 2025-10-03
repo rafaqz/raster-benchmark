@@ -1,5 +1,6 @@
 using Rasters, ArchGDAL, GeoDataFrames
 using Chairmarks
+using DataFrames
 
 include("utils.jl")
 
@@ -12,8 +13,8 @@ raster_files = filter(endswith(".TIF"), readdir(raster_dir; join = true))
 band_names = (:B1, :B10, :B11, :B2, :B3, :B4, :B5, :B6, :B7, :B9)
 # Extraction makes more sense from a stack than a raster,
 # as you get separate layers by name in the result
-rstack = RasterStack(raster_files; name=band_names)
+rstack = RasterStack(raster_files; name=band_names, lazy=false)
 
-benchmark = @be extract($rstack, $points_df) seconds=60
+benchmark = @be DataFrame(extract($rstack, $points_df)) seconds=60
 
 write_benchmark_as_csv(benchmark; task = "extract-points")
