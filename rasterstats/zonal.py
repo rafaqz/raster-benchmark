@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 import os
 import timeit
+import numpy as np
 import pandas as pd
+import geopandas as gpd
+import rasterio
 from rasterstats import zonal_stats
 
 
@@ -12,19 +15,28 @@ rasters = [r for r in rasters if r.endswith(('.TIF'))]
 rasters = [os.path.join(wd, catalog, r) for r in rasters]
 band_names = ["B1", "B10", "B11", "B2", "B3", "B4", "B5", "B6", "B7", "B9"]
 
+# load rasters into memory (numpy)
+stack = np.array([
+    rasterio.open(r).read(1) for r in rasters
+])
+transform = rasterio.open(rasters[0]).transform
+
+# load buffers into memory (geopandas)
 buffers = os.path.join('data', 'vector', 'buffers.gpkg')
+buffers = gpd.read_file(buffers)
 
 ### zonal
 
 t_list = [None] * 10
 for i in range(10):
     tic = timeit.default_timer()
-    data = []
-    for ras in rasters:
-        zonal = zonal_stats(buffers, ras, stats = 'mean')
-        zonal = [z['mean'] for z in zonal]
-        data.append(zonal)
     
+    data = []
+    for layer in range(stack.shape[0]):
+      zonal = zonal_stats(buffers, stack[layer], stats = 'mean', nodata = 0, affine = transform)
+      zonal = [z['mean'] for z in zonal]
+      data.append(zonal)
+      
     data = pd.DataFrame(data).transpose()
     data.columns = band_names
     
