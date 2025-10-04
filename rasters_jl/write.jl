@@ -19,7 +19,7 @@ stack_file = joinpath(data_dir, "stack.tif")
 # and Rasters compresses by Zstd by default, but every other
 # package uses LZW - so for consistency's sake we force the compression
 # to LZW as well.
-benchmark = @be write($stack_file, $ras; missingval=0, force=$true, options = $(Dict("COMPRESS" => "LZW", "INTERLEAVE" => "BAND"))) seconds=60
+benchmark = @be write($stack_file, $ras; missingval=UInt16(0), force=$true, options = $(Dict("COMPRESS" => "LZW", "INTERLEAVE" => "BAND"))) seconds=60
 
 rm(stack_file)
 
