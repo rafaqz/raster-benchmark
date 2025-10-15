@@ -14,7 +14,6 @@ nir = Raster(raster_files[7]; lazy=false) .* 1.0
 
 # do something
 get_ndvi(red, nir) = (nir .- red) ./ (nir .+ red)
-@time get_ndvi(red, nir)
 
 benchmark = @be get_ndvi($red, $nir) seconds=15
 
