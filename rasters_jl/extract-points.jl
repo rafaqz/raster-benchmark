@@ -1,4 +1,5 @@
 using Rasters, ArchGDAL, GeoDataFrames
+using GeoInterface
 using Chairmarks
 using DataFrames
 
@@ -14,6 +15,10 @@ band_names = (:B1, :B10, :B11, :B2, :B3, :B4, :B5, :B6, :B7, :B9)
 # Extraction makes more sense from a stack than a raster,
 # as you get separate layers by name in the result
 rstack = RasterStack(raster_files; name=band_names, lazy=false)
+GeoInterface.extent(points_df.geometry)
+df = DataFrame(extract(rstack, points_df))
+all(ismissing, df.B1)
+extent(rstack)
 
 benchmark = @be DataFrame(extract($rstack, $points_df)) seconds=60
 
